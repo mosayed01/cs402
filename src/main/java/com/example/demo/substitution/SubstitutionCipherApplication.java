@@ -36,9 +36,16 @@ public class SubstitutionCipherApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        keyTextField.setEditable(false);
-        outputTextArea.setEditable(false);
+        setupUI();
+        setupActions(stage);
 
+        Scene scene = new Scene(gridPane, 400, 300);
+        stage.setScene(scene);
+        stage.setTitle("Substitution Cipher Application");
+        stage.show();
+    }
+
+    private void setupUI() {
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setVgap(10);
         gridPane.setHgap(10);
@@ -55,6 +62,11 @@ public class SubstitutionCipherApplication extends Application {
         gridPane.add(writeOutputButton, 2, 3);
         gridPane.add(outputLabel, 0, 4);
         gridPane.add(outputTextArea, 1, 4, 2, 1);
+    }
+
+    private void setupActions(Stage stage) {
+        keyTextField.setEditable(false);
+        outputTextArea.setEditable(false);
 
         readKeyButton.setOnMouseClicked(e -> {
             key = KeyFileReader.readKeyFile(stage);
@@ -75,9 +87,7 @@ public class SubstitutionCipherApplication extends Application {
 
         encryptButton.setOnAction(e -> {
             if (key == null) {
-                keyTextField.setText(
-                        "Key not loaded. Please load the key first."
-                );
+                keyTextField.setText("Key not loaded. Please load the key first.");
                 return;
             }
 
@@ -88,9 +98,7 @@ public class SubstitutionCipherApplication extends Application {
 
         decryptButton.setOnAction(e -> {
             if (key == null) {
-                keyTextField.setText(
-                        "Key not loaded. Please load the key first."
-                );
+                keyTextField.setText("Key not loaded. Please load the key first.");
                 return;
             }
 
@@ -104,11 +112,6 @@ public class SubstitutionCipherApplication extends Application {
             String output = cipher.attack(input);
             outputTextArea.setText(output);
         });
-
-        Scene scene = new Scene(gridPane, 400, 300);
-        stage.setScene(scene);
-        stage.setTitle("Substitution Cipher Application");
-        stage.show();
     }
 
     public static void main(String[] args) {
