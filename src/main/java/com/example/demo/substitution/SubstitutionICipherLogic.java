@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SubstitutionICipherLogic implements ICipher<Map<Character, Character>>, IAttackable<String, String> {
+public class SubstitutionICipherLogic implements ICipher<Map<Character, Character>>, IAttackable {
 
     @Override
     public String encrypt(String input, Map<Character, Character> characterCharacterMap) {

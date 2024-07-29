@@ -1,5 +1,6 @@
 package com.example.demo.substitution;
 
+import com.example.demo.logic.IKnownKeyFileReader;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -10,9 +11,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyFileReader {
+public class CSVKeyFileReader implements IKnownKeyFileReader<Map<Character, Character>> {
 
-    public static Map<Character, Character> readKeyFile(Window window) {
+    @Override
+    public Map<Character, Character> readKeyFile(Window window) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.setInitialDirectory(new File("src/main/resources"));
