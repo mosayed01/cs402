@@ -1,4 +1,4 @@
-package com.example.demo.shift;
+package com.example.demo.ciphers.shift;
 
 import com.example.demo.base.IAttackable;
 import com.example.demo.base.ICipher;

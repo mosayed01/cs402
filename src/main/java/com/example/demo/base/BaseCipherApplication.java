@@ -16,14 +16,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
     protected IKnownKeyFileReader<KEY> keyFileReader;
     protected IAttackable attackable;
 
-    public BaseCipherApplication(
-            String title,
-            IKnownKeyFileReader<KEY> keyFileReader,
-            ICipher<KEY> cipher,
-            boolean isEditableKeyTextField,
-            boolean isAttackable,
-            IAttackable attackable
-    ) {
+    public BaseCipherApplication(String title, IKnownKeyFileReader<KEY> keyFileReader, ICipher<KEY> cipher, boolean isEditableKeyTextField, boolean isAttackable, IAttackable attackable) {
         this.title = title;
         this.keyFileReader = keyFileReader;
         this.isEditableKeyTextField = isEditableKeyTextField;
@@ -32,11 +25,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         this.attackable = attackable;
     }
 
-    public BaseCipherApplication(
-            String title,
-            ICipher<KEY> cipher,
-            IAttackable attackable
-    ) {
+    public BaseCipherApplication(String title, ICipher<KEY> cipher, IAttackable attackable) {
         this.title = title;
         this.isEditableKeyTextField = true;
         this.cipher = cipher;
@@ -72,10 +61,8 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         gridPane.add(keyTextField, 1, 1, 2, 1);
         gridPane.add(encryptButton, 0, 2);
         gridPane.add(decryptButton, 1, 2);
-        if (isAttackable)
-            gridPane.add(attackButton, 2, 2);
-        if (keyFileReader != null)
-            gridPane.add(readKeyButton, 0, 3);
+        if (isAttackable) gridPane.add(attackButton, 2, 2);
+        if (keyFileReader != null) gridPane.add(readKeyButton, 0, 3);
         gridPane.add(readInputButton, 1, 3);
         gridPane.add(writeOutputButton, 2, 3);
         gridPane.add(outputLabel, 0, 4);
@@ -86,15 +73,14 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         keyTextField.setEditable(isEditableKeyTextField);
         outputTextArea.setEditable(false);
 
-        if (keyFileReader != null)
-            readKeyButton.setOnMouseClicked(e -> {
-                key = keyFileReader.readKeyFile(stage);
-                if (key == null) {
-                    keyTextField.setText("Key not loaded.");
-                    return;
-                }
-                keyTextField.setText(key.toString());
-            });
+        if (keyFileReader != null) readKeyButton.setOnMouseClicked(e -> {
+            key = keyFileReader.readKeyFile(stage);
+            if (key == null) {
+                keyTextField.setText("Key not loaded.");
+                return;
+            }
+            keyTextField.setText(key.toString());
+        });
 
         readInputButton.setOnMouseClicked(e -> {
             String input = Utils.readTextFromFile(stage);
@@ -103,9 +89,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
             }
         });
 
-        writeOutputButton.setOnMouseClicked(e ->
-                Utils.writeTextToFile(stage, outputTextArea.getText())
-        );
+        writeOutputButton.setOnMouseClicked(e -> Utils.writeTextToFile(stage, outputTextArea.getText()));
 
         encryptButton.setOnAction(e -> {
             if (key == null && keyFileReader != null) {
@@ -113,9 +97,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
                 return;
             }
 
-            if (key == null) {
-                setKEY();
-            }
+            setKEY();
             String input = inputTextArea.getText();
             String output = cipher.encrypt(input, key);
             outputTextArea.setText(output);
@@ -126,10 +108,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
                 keyTextField.setText("Key not loaded. Please load the key first.");
                 return;
             }
-            if (key == null) {
-                setKEY();
-            }
-
+            setKEY();
             String input = inputTextArea.getText();
             String output = cipher.decrypt(input, key);
             outputTextArea.setText(output);

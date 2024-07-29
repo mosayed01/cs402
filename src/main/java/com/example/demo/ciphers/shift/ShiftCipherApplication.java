@@ -1,4 +1,4 @@
-package com.example.demo.shift;
+package com.example.demo.ciphers.shift;
 
 import com.example.demo.base.BaseCipherApplication;
 
@@ -15,7 +15,12 @@ public class ShiftCipherApplication extends BaseCipherApplication<Integer> {
 
     @Override
     protected void setKEY() {
-        key = keyTextField.getText().isEmpty() ? 0 : Integer.parseInt(keyTextField.getText());
+        if (keyTextField.getText().isEmpty()) {
+            outputTextArea.setText("Key is empty");
+            return;
+        }
+
+        key = Integer.parseInt(keyTextField.getText());
     }
 
     public static void main(String[] args) {

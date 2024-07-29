@@ -1,4 +1,4 @@
-package com.example.demo.substitution;
+package com.example.demo.ciphers.substitution;
 
 import com.example.demo.base.IAttackable;
 import com.example.demo.base.ICipher;

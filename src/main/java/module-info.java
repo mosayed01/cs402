@@ -5,10 +5,12 @@ module com.example.demo {
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
-    exports com.example.demo.substitution;
-    opens com.example.demo.substitution to javafx.fxml;
-    exports com.example.demo.shift;
-    opens com.example.demo.shift to javafx.fxml;
+    exports com.example.demo.ciphers.substitution;
+    opens com.example.demo.ciphers.substitution to javafx.fxml;
+    exports com.example.demo.ciphers.shift;
+    opens com.example.demo.ciphers.shift to javafx.fxml;
     exports com.example.demo.base;
     opens com.example.demo.base to javafx.fxml;
+    exports com.example.demo.ciphers.affine;
+    opens com.example.demo.ciphers.affine to javafx.fxml;
 }
