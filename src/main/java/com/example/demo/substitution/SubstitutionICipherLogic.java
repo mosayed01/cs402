@@ -1,7 +1,7 @@
 package com.example.demo.substitution;
 
-import com.example.demo.logic.IAttackable;
-import com.example.demo.logic.ICipher;
+import com.example.demo.base.IAttackable;
+import com.example.demo.base.ICipher;
 
 import java.util.ArrayList;
 import java.util.List;

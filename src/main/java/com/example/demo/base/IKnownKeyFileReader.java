@@ -1,4 +1,4 @@
-package com.example.demo.logic;
+package com.example.demo.base;
 
 import javafx.stage.Window;
 

@@ -1,9 +1,6 @@
 package com.example.demo.base;
 
 import com.example.demo.Utils;
-import com.example.demo.logic.IAttackable;
-import com.example.demo.logic.ICipher;
-import com.example.demo.logic.IKnownKeyFileReader;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -13,10 +10,10 @@ import javafx.stage.Stage;
 
 public abstract class BaseCipherApplication<KEY> extends Application {
     protected final String title;
-    protected final IKnownKeyFileReader<KEY> keyFileReader;
     protected final boolean isEditableKeyTextField;
     protected final boolean isAttackable;
     protected ICipher<KEY> cipher;
+    protected IKnownKeyFileReader<KEY> keyFileReader;
     protected IAttackable attackable;
 
     public BaseCipherApplication(
@@ -32,6 +29,18 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         this.isEditableKeyTextField = isEditableKeyTextField;
         this.cipher = cipher;
         this.isAttackable = isAttackable;
+        this.attackable = attackable;
+    }
+
+    public BaseCipherApplication(
+            String title,
+            ICipher<KEY> cipher,
+            IAttackable attackable
+    ) {
+        this.title = title;
+        this.isEditableKeyTextField = true;
+        this.cipher = cipher;
+        this.isAttackable = attackable != null;
         this.attackable = attackable;
     }
 
@@ -65,7 +74,8 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         gridPane.add(decryptButton, 1, 2);
         if (isAttackable)
             gridPane.add(attackButton, 2, 2);
-        gridPane.add(readKeyButton, 0, 3);
+        if (keyFileReader != null)
+            gridPane.add(readKeyButton, 0, 3);
         gridPane.add(readInputButton, 1, 3);
         gridPane.add(writeOutputButton, 2, 3);
         gridPane.add(outputLabel, 0, 4);
@@ -76,14 +86,15 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         keyTextField.setEditable(isEditableKeyTextField);
         outputTextArea.setEditable(false);
 
-        readKeyButton.setOnMouseClicked(e -> {
-            key = keyFileReader.readKeyFile(stage);
-            if (key == null) {
-                keyTextField.setText("Key not loaded.");
-                return;
-            }
-            keyTextField.setText(key.toString());
-        });
+        if (keyFileReader != null)
+            readKeyButton.setOnMouseClicked(e -> {
+                key = keyFileReader.readKeyFile(stage);
+                if (key == null) {
+                    keyTextField.setText("Key not loaded.");
+                    return;
+                }
+                keyTextField.setText(key.toString());
+            });
 
         readInputButton.setOnMouseClicked(e -> {
             String input = Utils.readTextFromFile(stage);
@@ -97,20 +108,26 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         );
 
         encryptButton.setOnAction(e -> {
-            if (key == null) {
+            if (key == null && keyFileReader != null) {
                 keyTextField.setText("Key not loaded. Please load the key first.");
                 return;
             }
 
+            if (key == null) {
+                setKEY();
+            }
             String input = inputTextArea.getText();
             String output = cipher.encrypt(input, key);
             outputTextArea.setText(output);
         });
 
         decryptButton.setOnAction(e -> {
-            if (key == null) {
+            if (key == null && keyFileReader != null) {
                 keyTextField.setText("Key not loaded. Please load the key first.");
                 return;
+            }
+            if (key == null) {
+                setKEY();
             }
 
             String input = inputTextArea.getText();
@@ -142,5 +159,9 @@ public abstract class BaseCipherApplication<KEY> extends Application {
 
     protected void otherSetup(Stage stage) {
         // override this method to add additional setup
+    }
+
+    protected void setKEY() {
+        // override this method to set the key
     }
 }

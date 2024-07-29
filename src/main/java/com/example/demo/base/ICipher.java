@@ -1,4 +1,4 @@
-package com.example.demo.logic;
+package com.example.demo.base;
 
 public interface ICipher<KEY> {
     String encrypt(String input, KEY key);

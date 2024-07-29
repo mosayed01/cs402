@@ -1,6 +1,6 @@
 package com.example.demo.substitution;
 
-import com.example.demo.logic.IKnownKeyFileReader;
+import com.example.demo.base.IKnownKeyFileReader;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
