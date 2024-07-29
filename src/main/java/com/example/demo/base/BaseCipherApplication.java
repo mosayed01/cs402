@@ -35,14 +35,6 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         this.attackable = attackable;
     }
 
-    public BaseCipherApplication(String title, IKnownKeyFileReader<KEY> keyFileReader, ICipher<KEY> cipher, IAttackable attackable) {
-        this(title, keyFileReader, cipher, false, attackable != null, attackable);
-    }
-
-    public BaseCipherApplication(String title, IKnownKeyFileReader<KEY> keyFileReader, ICipher<KEY> cipher) {
-        this(title, keyFileReader, cipher, false, false, null);
-    }
-
     protected KEY key;
 
     protected static final Label inputLabel = new Label("Input:");
@@ -148,7 +140,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
         stage.show();
     }
 
-    protected void otherSetup(Stage stage){
+    protected void otherSetup(Stage stage) {
         // override this method to add additional setup
     }
 }

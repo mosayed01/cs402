@@ -1,7 +1,6 @@
 package com.example.demo.substitution;
 
 import com.example.demo.base.BaseCipherApplication;
-import javafx.stage.Stage;
 
 import java.util.Map;
 
