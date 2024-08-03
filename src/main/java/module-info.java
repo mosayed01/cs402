@@ -5,6 +5,8 @@ module com.example.demo {
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
+    exports com.example.demo.ciphers.otp;
+    opens com.example.demo.ciphers.otp to javafx.fxml;
     exports com.example.demo.ciphers.substitution;
     opens com.example.demo.ciphers.substitution to javafx.fxml;
     exports com.example.demo.ciphers.shift;
