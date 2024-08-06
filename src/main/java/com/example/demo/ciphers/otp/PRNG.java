@@ -5,7 +5,7 @@ import java.math.BigInteger;
 public class PRNG {
 
     int seed;
-    int previous = 1;
+    int previous;
 
     public PRNG() {
         this(13);
@@ -13,6 +13,7 @@ public class PRNG {
 
     public PRNG(int seed) {
         this.seed = seed;
+        this.previous = seed;
     }
 
     public String generateKey(int length) {
@@ -26,5 +27,12 @@ public class PRNG {
     private int nextRand() {
         previous = new BigInteger(String.valueOf((5 * previous) + seed)).mod(new BigInteger("26")).intValue();
         return previous;
+    }
+
+    public static void main(String[] args) {
+        PRNG prng = new PRNG(13);
+        for (int i = 0; i < 50; i++) {
+            System.out.println(prng.generateKey(30));
+        }
     }
 }
