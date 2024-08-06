@@ -99,9 +99,7 @@ public abstract class BaseCipherApplication<KEY> extends Application {
 
             setKEY();
             String input = inputTextArea.getText();
-            System.out.println("input: " + input);
             String output = cipher.encrypt(input, key);
-            System.out.println("output: " + output);
             outputTextArea.setText(output);
         });
 
@@ -144,5 +142,13 @@ public abstract class BaseCipherApplication<KEY> extends Application {
 
     protected void setKEY() {
         // override this method to set the key
+    }
+
+    protected static void showErrorDialog(Throwable throwable) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(throwable.getClass().getSimpleName());
+        alert.setHeaderText(null);
+        alert.setContentText(throwable.getMessage());
+        alert.showAndWait();
     }
 }

@@ -23,6 +23,7 @@ public class OTPCipherApplication extends BaseCipherApplication<Object> {
     }
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> showErrorDialog(throwable));
         launch(args);
     }
 }

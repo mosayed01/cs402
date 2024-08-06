@@ -26,4 +26,9 @@ public class AffineCipherApplication extends BaseCipherApplication<Pair<Integer,
     protected void otherSetup(Stage stage) {
         keyLabel.setText("Key (hint: 9,13):\nIf empty, \ndefault key will be used");
     }
+
+    public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> showErrorDialog(throwable));
+        launch(args);
+    }
 }

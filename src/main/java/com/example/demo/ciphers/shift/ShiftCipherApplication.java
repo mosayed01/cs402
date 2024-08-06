@@ -24,6 +24,7 @@ public class ShiftCipherApplication extends BaseCipherApplication<Integer> {
     }
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> showErrorDialog(throwable));
         launch(args);
     }
 }

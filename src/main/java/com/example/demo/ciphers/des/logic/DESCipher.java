@@ -88,3 +88,6 @@ public class DESCipher implements ICipher<HexString> {
     }
 }
 
+// key in hex: BBBB5555EEEEFFFF
+// plain text in hex: 0000000000000000
+// cipher text in hex: 7A1E6D7C1E5A6D7C

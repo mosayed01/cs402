@@ -19,6 +19,7 @@ public class SubstitutionCipherApplication extends BaseCipherApplication<Map<Cha
     }
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> showErrorDialog(throwable));
         launch(args);
     }
 }
