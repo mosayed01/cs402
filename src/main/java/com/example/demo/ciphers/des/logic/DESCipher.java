@@ -3,6 +3,8 @@ package com.example.demo.ciphers.des.logic;
 import com.example.demo.base.ICipher;
 import com.example.demo.ciphers.des.logic.utils.*;
 
+import java.util.ArrayList;
+
 import static com.example.demo.ciphers.des.logic.utils.Utils.*;
 
 public class DESCipher implements ICipher<HexString> {
@@ -31,11 +33,28 @@ public class DESCipher implements ICipher<HexString> {
 
 
     @Override
-    public String encrypt(String input, HexString hexString) {
+    public String encrypt(String generalInput, HexString hexString) {
         byte[] key = hexString.toBinaryByteArray();
         byte[][] subKeys = KeySchedule.generateSubKeys(key);
 
-        return encrypt(input, subKeys);
+        ArrayList<String> blocks = new ArrayList<>();
+        int length = Math.ceilDiv(generalInput.length(), 8);
+        for (int i = 0; i < length; i++) {
+            int start = i * 8;
+            int endIfNotMultipleOf8 = (i + 1) * 8;
+            if (endIfNotMultipleOf8 > generalInput.length()) {
+                endIfNotMultipleOf8 = generalInput.length();
+            }
+            String block = generalInput.substring(start, endIfNotMultipleOf8);
+            blocks.add(Utils.convertStringToHex64Bit(block));
+        }
+
+
+        StringBuilder result = new StringBuilder();
+        for (String block : blocks) {
+            result.append(encrypt(block, subKeys));
+        }
+        return result.toString();
     }
 
     @Override
@@ -48,7 +67,24 @@ public class DESCipher implements ICipher<HexString> {
             reversedSubKeys[i] = subKeys[15 - i];
         }
 
-        return encrypt(input, reversedSubKeys);
+        ArrayList<String> blocks = new ArrayList<>();
+        int length = Math.ceilDiv(input.length(), 16);
+
+        for (int i = 0; i < length; i++) {
+            int start = i * 16;
+            int endIfNotMultipleOf16 = (i + 1) * 16;
+            if (endIfNotMultipleOf16 > input.length()) {
+                endIfNotMultipleOf16 = input.length();
+            }
+            String block = input.substring(start, endIfNotMultipleOf16);
+            blocks.add(block);
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (String block : blocks) {
+            result.append(Utils.convertHexToString64Bit(encrypt(block, reversedSubKeys)));
+        }
+        return result.toString();
     }
 
     private String encrypt(String input, byte[][] subKeys) {
@@ -80,10 +116,11 @@ public class DESCipher implements ICipher<HexString> {
 
     public static void main(String[] args) {
         DESCipher desCipher = new DESCipher();
-        String key = "BBBB5555EEEEFFFF";
-        String plainText = "0000000000000000";
+        String generalKey = "MohammedSayedMohammedSayed";
+        String key = Utils.convertStringToHex64Bit(generalKey, true);
+        String plainText = "MohammedSayedMohammedSayed";
         String cipherText = desCipher.encrypt(plainText, new HexString(key));
-        System.out.println(cipherText);
+        System.out.println('\n' + cipherText);
         System.out.println(desCipher.decrypt(cipherText, new HexString(key)));
     }
 }

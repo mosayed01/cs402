@@ -1,6 +1,5 @@
 package com.example.demo.ciphers.des.logic.utils;
 
-import java.util.Arrays;
 
 public class Utils {
     public static byte[] hexStringToBinary(String hexString) {
@@ -67,11 +66,61 @@ public class Utils {
         return result;
     }
 
+
+    public static String convertStringToHex64Bit(String input, boolean isCropped) {
+        String newString = input;
+        if (isCropped && input.length() > 8) {
+            newString = input.substring(0, 8);
+        }
+
+        return convertStringToHex64Bit(newString);
+    }
+
+    public static String convertStringToHex64Bit(String input) {
+        if (input.length() > 8) {
+            throw new IllegalArgumentException("Input string must be 8 bytes or less.");
+        }
+
+        String paddedInput = String.format("%-8s", input);
+
+        StringBuilder hexString = new StringBuilder();
+        for (char ch : paddedInput.toCharArray()) {
+            hexString.append(String.format("%02x", (int) ch));
+        }
+
+        return hexString.toString();
+    }
+
+
+    public static String convertHexToString64Bit(String hex) {
+        if (hex.length() != 16) {
+            throw new IllegalArgumentException("Hex string must be 16 characters long.");
+        }
+
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < hex.length(); i += 2) {
+            String str = hex.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+
+        return output.toString();
+    }
+
     public static void main(String[] args) {
-        String hexString = "18CA18AD5A78E394";
-        byte[] bytes = hexStringToBinary(hexString);
-        System.out.println(Arrays.toString(hexStringToBinary(hexString)) + " " + bytes.length);
-        System.out.println(binaryToHexString(bytes) + " " + bytes.length);
+        String originalString = "Hello";
+        String hexString = convertStringToHex64Bit(originalString);
+        System.out.println("64-bit Hex String: " + hexString);
+
+        String convertedString = convertHexToString64Bit(hexString);
+        System.out.println("Converted String: " + convertedString);
+
+        // Assertion
+        if (originalString.equals(convertedString.trim())) {
+            System.out.println("Test Passed: The original string and the converted string match.");
+        } else {
+            System.out.println("Test Failed: The original string and the converted string do not match.");
+        }
     }
 
 }

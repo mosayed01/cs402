@@ -3,6 +3,7 @@ package com.example.demo.ciphers.des;
 import com.example.demo.base.BaseCipherApplication;
 import com.example.demo.ciphers.des.logic.DESCipher;
 import com.example.demo.ciphers.des.logic.utils.HexString;
+import com.example.demo.ciphers.des.logic.utils.Utils;
 
 public class DESCipherApplication extends BaseCipherApplication<HexString> {
 
@@ -18,7 +19,8 @@ public class DESCipherApplication extends BaseCipherApplication<HexString> {
 
     @Override
     protected void setKEY() {
-        key = new HexString(keyTextField.getText());
+        String hexKey = Utils.convertStringToHex64Bit(keyTextField.getText(), true);
+        key = new HexString(hexKey);
     }
 
     public static void main(String[] args) {
