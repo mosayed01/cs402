@@ -1,6 +1,6 @@
-package com.example.demo.ciphers.des.logic.utils;
+package com.example.demo.ciphers.des.logic;
 
-import static com.example.demo.ciphers.des.logic.utils.Utils.*;
+import static com.example.demo.utils.Utils.*;
 
 public class KeySchedule {
     private static final int[] PC1 = {

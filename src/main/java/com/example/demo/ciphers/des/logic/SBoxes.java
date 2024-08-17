@@ -1,6 +1,6 @@
-package com.example.demo.ciphers.des.logic.utils;
+package com.example.demo.ciphers.des.logic;
 
-import static com.example.demo.ciphers.des.logic.utils.Utils.permute;
+import static com.example.demo.utils.Utils.permute;
 
 public class SBoxes {
     private static final int[][] S1 = {

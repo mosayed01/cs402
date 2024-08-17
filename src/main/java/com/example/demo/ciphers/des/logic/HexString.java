@@ -1,17 +1,14 @@
-package com.example.demo.ciphers.des.logic.utils;
+package com.example.demo.ciphers.des.logic;
 
 import java.util.Arrays;
 
-import static com.example.demo.ciphers.des.logic.utils.Utils.binaryToHexString;
-import static com.example.demo.ciphers.des.logic.utils.Utils.hexStringToBinary;
+import static com.example.demo.utils.Utils.binaryToHexString;
+import static com.example.demo.utils.Utils.hexStringToBinary;
 
 public class HexString {
     private final String hexString;
 
     public HexString(String hexString) {
-        if (hexString.length() % 2 != 0) {
-            throw new IllegalArgumentException("Length of hexString must be an even number");
-        }
         if (!hexString.matches("[0-9A-Fa-f]+")) {
             throw new IllegalArgumentException("hexString must contain only hexadecimal characters");
         }
@@ -20,6 +17,19 @@ public class HexString {
 
     public byte[] toBinaryByteArray() {
         return hexStringToBinary(hexString);
+    }
+
+    public int[] toBytes() {
+        byte[] bytes = toBinaryByteArray();
+        int[] result = new int[bytes.length / 8];
+        for (int i = 0; i < result.length; i++) {
+            int decimal = 0;
+            for (int j = 0; j < 8; j++) {
+                decimal = decimal * 2 + bytes[i * 8 + j];
+            }
+            result[i] = decimal;
+        }
+        return result;
     }
 
     public static HexString fromBinaryByteArray(byte[] bytes) {

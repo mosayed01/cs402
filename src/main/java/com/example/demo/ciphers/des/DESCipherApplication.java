@@ -2,8 +2,8 @@ package com.example.demo.ciphers.des;
 
 import com.example.demo.base.BaseCipherApplication;
 import com.example.demo.ciphers.des.logic.DESCipher;
-import com.example.demo.ciphers.des.logic.utils.HexString;
-import com.example.demo.ciphers.des.logic.utils.Utils;
+import com.example.demo.ciphers.des.logic.HexString;
+import com.example.demo.utils.Utils;
 
 public class DESCipherApplication extends BaseCipherApplication<HexString> {
 

@@ -1,11 +1,11 @@
 package com.example.demo.ciphers.des.logic;
 
 import com.example.demo.base.ICipher;
-import com.example.demo.ciphers.des.logic.utils.*;
+import com.example.demo.utils.Utils;
 
 import java.util.ArrayList;
 
-import static com.example.demo.ciphers.des.logic.utils.Utils.*;
+import static com.example.demo.utils.Utils.*;
 
 public class DESCipher implements ICipher<HexString> {
 

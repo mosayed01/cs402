@@ -1,5 +1,7 @@
 package com.example.demo.ciphers.des.logic.utils;
 
+import com.example.demo.ciphers.des.logic.KeySchedule;
+import com.example.demo.utils.Utils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

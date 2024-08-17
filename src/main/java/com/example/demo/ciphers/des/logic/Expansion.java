@@ -1,8 +1,8 @@
-package com.example.demo.ciphers.des.logic.utils;
+package com.example.demo.ciphers.des.logic;
 
 import java.util.Arrays;
 
-import static com.example.demo.ciphers.des.logic.utils.Utils.permute;
+import static com.example.demo.utils.Utils.permute;
 
 public class Expansion {
     private static final int[] EXPANSION_TABLE = {
