@@ -3,7 +3,7 @@ package com.example.demo.ciphers.aes.logic;
 
 import static com.example.demo.ciphers.aes.logic.GaloisFieldMultiply.multiply;
 
-public class MixColumn {
+public class MixColumns {
 
     private static final int[][] MIX_COLUMN_MATRIX = {
             {0x02, 0x03, 0x01, 0x01},

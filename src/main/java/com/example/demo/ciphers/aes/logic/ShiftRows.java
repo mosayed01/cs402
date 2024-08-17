@@ -1,6 +1,6 @@
 package com.example.demo.ciphers.aes.logic;
 
-public class ShiftRow {
+public class ShiftRows {
     public static int[][] shiftRows(int[][] state) {
         int[][] temp = new int[4][4];
         for (int i = 0; i < 4; i++) {
