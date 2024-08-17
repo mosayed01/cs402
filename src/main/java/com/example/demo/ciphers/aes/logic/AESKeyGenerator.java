@@ -17,7 +17,7 @@ public class AESKeyGenerator {
         if (hexKey.toString().length() > 32) {
             hexKey = new HexString(hexKey.toString().substring(0, 32));
         } else if (hexKey.toString().length() < 32) {
-            hexKey = new HexString(hexKey + "\0".repeat(32 - hexKey.toString().length()));
+            hexKey = new HexString(hexKey + "32".repeat(32 - hexKey.toString().length()));
         }
 
         int[] bytes = hexKey.toBytes();

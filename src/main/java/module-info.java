@@ -2,6 +2,8 @@ module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
 
+    exports com.example.demo.ciphers.aes;
+    opens com.example.demo.ciphers.aes to javafx.fxml;
     exports com.example.demo.ciphers.otp;
     opens com.example.demo.ciphers.otp to javafx.fxml;
     exports com.example.demo.ciphers.substitution;

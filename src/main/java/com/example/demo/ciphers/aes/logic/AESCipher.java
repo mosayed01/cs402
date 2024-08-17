@@ -10,15 +10,26 @@ public class AESCipher implements ICipher<String> {
 
     @Override
     public String encrypt(String input, String keyString) {
+        if (input.length() % 16 != 0) {
+            input = input + "\0".repeat(16 - input.length() % 16);
+        }
+
+        int blockCount = Math.ceilDiv(input.length(), 16);
+        System.out.println("Block count: " + blockCount);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < blockCount; i++) {
+            String block = input.substring(i * 16, Math.min((i + 1) * 16, input.length()));
+            result.append(encryptBlock(block, keyString));
+        }
+        return result.toString();
+    }
+
+    private String encryptBlock(String input, String keyString) {
         HexString hexString = convertFromStringToHex(keyString);
         HexString inputInHex = convertFromStringToHex(input);
-        System.out.println("000Key: " + hexString);
-
+        System.out.println("Hex Key: " + hexString);
         HexString[] keys = AESKeyGenerator.generateKeys(hexString);
-        System.out.println("Keys: ");
-        for (int i = 0; i < keys.length; i++) {
-            System.out.println("Key " + i + ": " + keys[i]);
-        }
         return encrypt(inputInHex.toString(), keys);
     }
 
@@ -127,7 +138,8 @@ public class AESCipher implements ICipher<String> {
     public static void main(String[] args) {
         System.out.println("\n\nTest Encryption: ");
         String key = "Thats my Kung Fu";
-        String inputForEncryption = "Two One Nine Two";
+        String inputForEncryption = "Two One Nine Two Three";
+        System.out.println(inputForEncryption.length());
         String cipherText = "29C3505F571420F6402299B31A02D73A";
         AESCipher aesCipher = new AESCipher();
         String encrypted = aesCipher.encrypt(inputForEncryption, key);
