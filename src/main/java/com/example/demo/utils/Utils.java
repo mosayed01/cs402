@@ -1,6 +1,7 @@
 package com.example.demo.utils;
 
 
+import com.example.demo.ciphers.des.logic.HexString;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -82,6 +83,14 @@ public class Utils {
             result[i] = bytes[table[i] - 1];
         }
         return result;
+    }
+
+    public static HexString convertFromStringToHex(String input){
+        StringBuilder hexString = new StringBuilder();
+        for (char ch : input.toCharArray()) {
+            hexString.append(String.format("%02x", (int) ch));
+        }
+        return new HexString(hexString.toString());
     }
 
     public static String convertStringToHex64Bit(String input, boolean isCropped) {

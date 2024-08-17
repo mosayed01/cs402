@@ -3,21 +3,27 @@ package com.example.demo.ciphers.aes.logic;
 import com.example.demo.base.ICipher;
 import com.example.demo.ciphers.des.logic.HexString;
 
-public class AESCipher implements ICipher<HexString> {
+import static com.example.demo.utils.Utils.convertFromStringToHex;
+
+public class AESCipher implements ICipher<String> {
 
 
     @Override
-    public String encrypt(String input, HexString hexString) {
+    public String encrypt(String input, String keyString) {
+        HexString hexString = convertFromStringToHex(keyString);
+        HexString inputInHex = convertFromStringToHex(input);
+        System.out.println("000Key: " + hexString);
+
         HexString[] keys = AESKeyGenerator.generateKeys(hexString);
         System.out.println("Keys: ");
         for (int i = 0; i < keys.length; i++) {
             System.out.println("Key " + i + ": " + keys[i]);
         }
-        return encrypt(input, keys);
+        return encrypt(inputInHex.toString(), keys);
     }
 
     @Override
-    public String decrypt(String input, HexString hexString) {
+    public String decrypt(String input, String hexString) {
         return "";
     }
 
@@ -120,11 +126,11 @@ public class AESCipher implements ICipher<HexString> {
 
     public static void main(String[] args) {
         System.out.println("\n\nTest Encryption: ");
-        HexString hexKey = new HexString("5468617473206D79204B756E67204675");
-        String inputForEncryption = "54776F204F6E65204E696E652054776F";
+        String key = "Thats my Kung Fu";
+        String inputForEncryption = "Two One Nine Two";
         String cipherText = "29C3505F571420F6402299B31A02D73A";
         AESCipher aesCipher = new AESCipher();
-        String encrypted = aesCipher.encrypt(inputForEncryption, hexKey);
+        String encrypted = aesCipher.encrypt(inputForEncryption, key);
         System.out.println("Expected: " + cipherText);
         System.out.println("Actual: " + encrypted);
     }

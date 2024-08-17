@@ -14,8 +14,10 @@ public class AESKeyGenerator {
     };
 
     public static HexString[] generateKeys(HexString hexKey) {
-        if (hexKey.toString().length() != 32) {
-            throw new IllegalArgumentException("Key must be 128 bits long");
+        if (hexKey.toString().length() > 32) {
+            hexKey = new HexString(hexKey.toString().substring(0, 32));
+        } else if (hexKey.toString().length() < 32) {
+            hexKey = new HexString(hexKey + "\0".repeat(32 - hexKey.toString().length()));
         }
 
         int[] bytes = hexKey.toBytes();
