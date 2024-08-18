@@ -44,7 +44,7 @@ public class ByteSubstitution {
         return getNewState(state, S_BOX);
     }
 
-    public static int[][] inverseSubstitute(int[][] state) {
+    public static int[][] reverseSubstitute(int[][] state) {
         return getNewState(state, INV_S_BOX);
     }
 
@@ -52,12 +52,6 @@ public class ByteSubstitution {
         int row = (value & 0xf0) >> 4;
         int col = value & 0x0f;
         return S_BOX[row][col];
-    }
-
-    public static int inverseSubstitute(int value) {
-        int row = (value & 0xf0) >> 4;
-        int col = value & 0x0f;
-        return INV_S_BOX[row][col];
     }
 
     private static int[][] getNewState(int[][] state, int[][] substitutionTable) {
@@ -101,7 +95,7 @@ public class ByteSubstitution {
         }
 
         System.out.println("\nInverse substituted state:");
-        int[][] inverseResult = inverseSubstitute(result);
+        int[][] inverseResult = reverseSubstitute(result);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 System.out.printf("%02x ", inverseResult[i][j]);

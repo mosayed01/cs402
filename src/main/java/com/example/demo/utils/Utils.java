@@ -92,6 +92,18 @@ public class Utils {
         }
         return new HexString(hexString.toString());
     }
+    public static String convertFromHexToString(String input){
+        return getString(input);
+    }
+
+    private static String getString(String input) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < input.length(); i += 2) {
+            String str = input.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+        return output.toString();
+    }
 
     public static String convertStringToHex64Bit(String input, boolean isCropped) {
         String newString = input;
@@ -122,14 +134,7 @@ public class Utils {
             throw new IllegalArgumentException("Hex string must be 16 characters long.");
         }
 
-        StringBuilder output = new StringBuilder();
-
-        for (int i = 0; i < hex.length(); i += 2) {
-            String str = hex.substring(i, i + 2);
-            output.append((char) Integer.parseInt(str, 16));
-        }
-
-        return output.toString();
+        return getString(hex);
     }
 
     public static String readTextFromFile(Window window) {

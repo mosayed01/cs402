@@ -3,11 +3,74 @@ package com.example.demo.ciphers.aes.logic;
 import com.example.demo.base.ICipher;
 import com.example.demo.ciphers.des.logic.HexString;
 
+import static com.example.demo.utils.Utils.convertFromHexToString;
 import static com.example.demo.utils.Utils.convertFromStringToHex;
 
 public class AESCipher implements ICipher<String> {
 
 
+    // region decryption
+    @Override
+    public String decrypt(String cipher, String hexString) {
+        if (cipher.length() % 32 != 0) {
+            throw new IllegalArgumentException("Invalid cipher length");
+        }
+
+        int blockCount = Math.ceilDiv(cipher.length(), 32);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < blockCount; i++) {
+            String block = cipher.substring(i * 32, (i + 1) * 32);
+            result.append(convertFromHexToString(decryptBlock(block, hexString)));
+        }
+        return result.toString().replaceAll("\0", "");
+    }
+
+    private static String decryptBlock(String cipher, String keyString) {
+        HexString hexString = convertFromStringToHex(keyString);
+        HexString[] keys = AESKeyGenerator.generateKeys(hexString);
+
+        return decrypt(cipher, keys);
+    }
+
+    private static String decrypt(String cipher, HexString[] keys) {
+        // convert input to 4x4 matrix
+        int[][] state = convertHexStringToMatrixInByte(cipher);
+        int[][] lastKey = convertHexStringToMatrixInByte(keys[keys.length - 1].toString());
+
+        // first round
+        // key addition
+        int[][] addedMatrix = new int[4][4];
+        xor(state, lastKey, addedMatrix);
+        // inverse shift row
+        int[][] reverseShifted = ShiftRows.reverseShiftRows(addedMatrix);
+        // inverse byte substitution
+        int[][] reverseSubstituted = ByteSubstitution.reverseSubstitute(reverseShifted);
+
+        // round from 9-1
+        for (int i = 9; i >= 1; i--) {
+            // key addition
+            int[][] key = convertHexStringToMatrixInByte(keys[i].toString());
+            xor(reverseSubstituted, key, addedMatrix);
+            // inverse mix columns
+            int[][] reverseMixed = MixColumns.reverseMixColumns(addedMatrix);
+            // inverse shift row
+            reverseShifted = ShiftRows.reverseShiftRows(reverseMixed);
+            // inverse byte substitution
+            reverseSubstituted = ByteSubstitution.reverseSubstitute(reverseShifted);
+        }
+
+
+        // key addition with k0
+        int[][] key0 = convertHexStringToMatrixInByte(keys[0].toString());
+        xor(reverseSubstituted, key0, addedMatrix);
+
+        return convertMatrixInByteToHexString(addedMatrix);
+    }
+
+    // endregion
+
+    // region encryption
     @Override
     public String encrypt(String input, String keyString) {
         if (input.length() % 16 != 0) {
@@ -15,7 +78,6 @@ public class AESCipher implements ICipher<String> {
         }
 
         int blockCount = Math.ceilDiv(input.length(), 16);
-        System.out.println("Block count: " + blockCount);
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < blockCount; i++) {
@@ -28,25 +90,14 @@ public class AESCipher implements ICipher<String> {
     private String encryptBlock(String input, String keyString) {
         HexString hexString = convertFromStringToHex(keyString);
         HexString inputInHex = convertFromStringToHex(input);
-        System.out.println("Hex Key: " + hexString);
         HexString[] keys = AESKeyGenerator.generateKeys(hexString);
         return encrypt(inputInHex.toString(), keys);
-    }
-
-    @Override
-    public String decrypt(String input, String hexString) {
-        return "";
     }
 
     private String encrypt(String input, HexString[] keys) {
         // convert input to 4x4 matrix
         int[][] state = convertHexStringToMatrixInByte(input);
         int[][] key0 = convertHexStringToMatrixInByte(keys[0].toString());
-
-        System.out.println("\nState: ");
-        printMatrix(state);
-        System.out.println("\nKey 0: ");
-        printMatrix(key0);
 
         // key addition layer
         int[][] addedKey = new int[4][4];
@@ -55,62 +106,36 @@ public class AESCipher implements ICipher<String> {
 
         // round from 1-9
         for (int round = 1; round < 10; round++) {
-            System.out.println("\nRound " + round);
             // byte substitution
             int[][] substituted = ByteSubstitution.substitute(addedKey);
-            System.out.println("\nSubstituted: ");
-            printMatrix(substituted);
             // shift rows
             int[][] shifted = ShiftRows.shiftRows(substituted);
-            System.out.println("\nShifted: ");
-            printMatrix(shifted);
             // mix columns
             int[][] mixed = MixColumns.mixColumns(shifted);
-            System.out.println("\nMixed: ");
-            printMatrix(mixed);
             // key addition layer
             int[][] key = convertHexStringToMatrixInByte(keys[round].toString());
             xor(mixed, key, addedKey);
-            System.out.println("Round " + round + " result: " + convertMatrixInByteToHexString(addedKey));
-            System.out.println();
         }
 
         // last round without mix columns
-        System.out.println("\nRound 10");
         // byte substitution
         int[][] substituted = ByteSubstitution.substitute(addedKey);
-        System.out.println("\nSubstituted: ");
-        printMatrix(substituted);
         // shift rows
         int[][] shifted = ShiftRows.shiftRows(substituted);
-        System.out.println("\nShifted: ");
-        printMatrix(shifted);
         // key addition layer
         int[][] key = convertHexStringToMatrixInByte(keys[10].toString());
-        System.out.println("\nKey 10: ");
-        printMatrix(key);
         xor(shifted, key, addedKey);
-        System.out.println("Round 10 result: " + convertMatrixInByteToHexString(addedKey));
 
         return convertMatrixInByteToHexString(addedKey);
     }
+    // endregion
 
-    private void xor(int[][] state, int[][] otherState, int[][] result) {
+    // region utils
+    private static void xor(int[][] state, int[][] otherState, int[][] result) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 result[i][j] = state[i][j] ^ otherState[i][j];
             }
-        }
-        System.out.println("\nAdded Key: ");
-        printMatrix(result);
-    }
-
-    private void printMatrix(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int b : row) {
-                System.out.printf("%02X ", b);
-            }
-            System.out.println();
         }
     }
 
@@ -134,16 +159,19 @@ public class AESCipher implements ICipher<String> {
         }
         return result.toString();
     }
+    // endregion
 
     public static void main(String[] args) {
-        System.out.println("\n\nTest Encryption: ");
         String key = "Thats my Kung Fu";
         String inputForEncryption = "Two One Nine Two Three";
-        System.out.println(inputForEncryption.length());
-        String cipherText = "29C3505F571420F6402299B31A02D73A";
         AESCipher aesCipher = new AESCipher();
         String encrypted = aesCipher.encrypt(inputForEncryption, key);
-        System.out.println("Expected: " + cipherText);
-        System.out.println("Actual: " + encrypted);
+        String decrypted = aesCipher.decrypt(encrypted, key);
+
+        System.out.println("\n\nTest Encryption: ");
+        System.out.println("Key: " + key);
+        System.out.println("Input: " + inputForEncryption);
+        System.out.println("Encrypted: " + encrypted);
+        System.out.println("Decrypted: " + decrypted);
     }
 }
