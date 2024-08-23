@@ -1,8 +1,6 @@
 package com.example.demo.ciphers.aes;
 
 import com.example.demo.base.BaseCipherApplication;
-import com.example.demo.base.IAttackable;
-import com.example.demo.base.ICipher;
 import com.example.demo.ciphers.aes.logic.AESCipher;
 
 public class AESApplication extends BaseCipherApplication<String> {
