@@ -12,7 +12,6 @@ public class AESCipher implements ICipher<String> {
     // region decryption
     @Override
     public String decrypt(String cipher, String hexString) {
-        System.out.println("cipher: " + cipher);
         if (cipher.length() % 32 != 0) {
             throw new IllegalArgumentException("Invalid cipher length");
         }
