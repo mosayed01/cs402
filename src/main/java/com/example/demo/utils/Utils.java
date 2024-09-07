@@ -92,11 +92,15 @@ public class Utils {
         }
         return new HexString(hexString.toString());
     }
-    public static String convertFromHexToString(String input){
-        return getString(input);
+    public static String convertHexToString64Bit(String hex) {
+        if (hex.length() != 16) {
+            throw new IllegalArgumentException("Hex string must be 16 characters long.");
+        }
+
+        return convertFromHexToString(hex);
     }
 
-    private static String getString(String input) {
+    public static String convertFromHexToString(String input){
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < input.length(); i += 2) {
             String str = input.substring(i, i + 2);
@@ -127,14 +131,6 @@ public class Utils {
         }
 
         return hexString.toString();
-    }
-
-    public static String convertHexToString64Bit(String hex) {
-        if (hex.length() != 16) {
-            throw new IllegalArgumentException("Hex string must be 16 characters long.");
-        }
-
-        return getString(hex);
     }
 
     public static String readTextFromFile(Window window) {
